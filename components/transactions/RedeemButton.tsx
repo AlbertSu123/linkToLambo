@@ -5,6 +5,7 @@ import { Button } from '../ui/button'
 import { linkToLamboAbi, linkToLamboAddress } from '@/lib/contracts/LinkToLambo'
 import { DEFAULT_CHAIN } from '@/lib/constants'
 import { toast } from 'sonner'
+import { useRouter } from 'next/navigation'
 
 export default function RedeemButton({
 	password,
@@ -12,6 +13,7 @@ export default function RedeemButton({
 	password: string | null
 }) {
 	const { primaryWallet } = useDynamicContext()
+	const router = useRouter()
 
 	const handleTransaction = async () => {
 		if (!password) {
@@ -31,6 +33,7 @@ export default function RedeemButton({
 			})
 			toast.dismiss(loading)
 			toast.success('Token redeemed!')
+			router.push('/')
 		}
 	}
 	return (

@@ -1,3 +1,4 @@
+import { USDCIcon } from '@/components/icons/USDCIcon'
 import Page from '@/components/page'
 import Section from '@/components/section'
 import TokenDisplay, { Token } from '@/components/token-display'
@@ -48,15 +49,21 @@ const Index = () => {
 		return (
 			<Page>
 				<Section>
-					<div className='container mx-auto px-4 py-8 flex flex-col items-center justify-center'>
-						<h1 className='text-3xl font-bold text-center mb-4'>
-							Send $DEGEN to anyone
+					<div className='container mx-auto px-4 flex flex-col items-center justify-center min-h-screen'>
+						<h1 className='text-5xl font-extrabold text-center mb-6 text-black shadow-text'>
+							Send Tokens to Anyone, Anywhere
 						</h1>
-						<h2 className='text-xl text-center mb-6'>
-							Make a link and share it
+						<h2 className='text-2xl text-center mb-8 text-black shadow-text'>
+							Create a magical link and share the wealth
 						</h2>
 						<div className='flex justify-center'>
-							<DynamicWidget variant='modal' />
+							<DynamicWidget
+								variant='modal'
+								buttonClassName='bg-white text-purple-600 font-bold py-3 px-6 rounded-full hover:bg-purple-100 transition duration-300 transform hover:scale-105'
+							/>
+						</div>
+						<div className='mt-12'>
+							<USDCIcon width={50} height={50} className='animate-bounce' />
 						</div>
 					</div>
 				</Section>
