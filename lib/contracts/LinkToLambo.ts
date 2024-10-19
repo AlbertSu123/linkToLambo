@@ -1,7 +1,7 @@
 import { Address } from 'viem'
 
 export const linkToLamboAddress: Address =
-	'0xF482D3C967A9Bf62eA3f799D98880e70dDAC7A73'
+	'0x01a3473184cc6ffC6Bd4D9c907B0E9Bd6129989d'
 export const linkToLamboAbi = [
 	{
 		type: 'function',
@@ -25,7 +25,7 @@ export const linkToLamboAbi = [
 	{
 		type: 'function',
 		name: 'redeemLink',
-		inputs: [{ name: 'password', type: 'uint256', internalType: 'uint256' }],
+		inputs: [{ name: 'password', type: 'string', internalType: 'string' }],
 		outputs: [],
 		stateMutability: 'nonpayable',
 	},

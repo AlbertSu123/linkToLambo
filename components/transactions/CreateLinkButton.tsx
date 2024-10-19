@@ -48,8 +48,6 @@ export default function CreateLinkButton({
 				functionName: 'approve',
 				args: [linkToLamboAddress, BigInt(tokenAmount)],
 			})
-			console.log('hex val', toHex(password, { size: 32 }))
-			console.log('keccak256(toHex(password))', keccak256(toHex(password)))
 			const createLinkTx = await client.writeContract({
 				address: linkToLamboAddress,
 				abi: linkToLamboAbi,
@@ -57,9 +55,7 @@ export default function CreateLinkButton({
 				args: [
 					tokenAddress,
 					BigInt(tokenAmount),
-					keccak256(
-						encodeAbiParameters([{ type: 'uint256' }], [BigInt(password)]),
-					),
+					keccak256(encodeAbiParameters([{ type: 'string' }], [password])),
 				],
 			})
 			console.log('createLinkTx', createLinkTx)

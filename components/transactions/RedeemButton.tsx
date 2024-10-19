@@ -25,9 +25,8 @@ export default function RedeemButton({
 				address: linkToLamboAddress,
 				abi: linkToLamboAbi,
 				functionName: 'redeemLink',
-				args: [BigInt(password)],
+				args: [password],
 			})
-			console.log('redeemTx', redeemTx)
 		}
 	}
 	return (
