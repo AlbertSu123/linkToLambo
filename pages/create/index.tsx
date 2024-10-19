@@ -6,12 +6,14 @@ import { Input } from '@/components/ui/input'
 import CreateLinkButton from '@/components/transactions/CreateLinkButton'
 import { usdcContractAbi, usdcContractAddress } from '@/lib/contracts/USDC'
 import { Button } from '@/components/ui/button'
-import { APP_URL } from '@/lib/constants'
+import { APP_URL, DEFAULT_CHAIN } from '@/lib/constants'
 import QRCode from 'react-qr-code'
 import { useDynamicContext } from '@dynamic-labs/sdk-react-core'
 import { isEthereumWallet } from '@dynamic-labs/ethereum'
 import { Card } from '@/components/ui/card'
 import TokenDisplay from '@/components/token-display'
+import { toast } from 'sonner'
+import { linkToLamboAddress, linkToLamboAbi } from '@/lib/contracts/LinkToLambo'
 
 export default function Create() {
 	const [tokenAddress, setTokenAddress] = useState<Address | null>(
@@ -40,6 +42,23 @@ export default function Create() {
 		}
 	}, [tokenAddress])
 
+	const handleRedeem = async (password: string) => {
+		if (primaryWallet && isEthereumWallet(primaryWallet)) {
+			const loading = toast.loading('Redeeming link...')
+			const client = await primaryWallet.getWalletClient(
+				DEFAULT_CHAIN.id.toString(),
+			)
+			const redeemTx = await client.writeContract({
+				address: linkToLamboAddress,
+				abi: linkToLamboAbi,
+				functionName: 'redeemLink',
+				args: [password],
+			})
+			toast.dismiss(loading)
+			toast.success('Link redeemed!')
+		}
+	}
+
 	if (created) {
 		return (
 			<Page>
@@ -48,7 +67,7 @@ export default function Create() {
 						<h2 className='text-2xl font-bold mb-4'>Share link</h2>
 						<p className='text-gray-600 mb-4'>
 							Your assets are ready to claim. Send the link via text or email.
-							The Stash can be reclaimed in your transaction history.
+							The token can be reclaimed in your transaction history.
 						</p>
 
 						<div className='flex justify-between items-center mb-4'>
@@ -58,6 +77,7 @@ export default function Create() {
 									className='bg-black text-white px-4 py-2 rounded-full flex items-center'
 									onClick={() => {
 										navigator.clipboard.writeText(shareUrl)
+										toast.success('Link copied to clipboard!')
 									}}
 								>
 									<svg
@@ -77,7 +97,15 @@ export default function Create() {
 							</div>
 						</div>
 						<div className='flex justify-center mt-6'>
-							<Button variant='outline' onClick={() => setCreated(false)}>
+							<Button
+								variant='outline'
+								disabled={!password}
+								onClick={() => {
+									if (!password) return
+									setCreated(false)
+									handleRedeem(password)
+								}}
+							>
 								Undo Share
 							</Button>
 						</div>
