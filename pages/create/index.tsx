@@ -1,14 +1,12 @@
 import Page from '@/components/page'
 import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
-import { useAccount } from 'wagmi'
+import { useState } from 'react'
 import { Address } from 'viem'
 import Section from '@/components/section'
 import { Input } from '@/components/ui/input'
 import CreateLinkButton from '@/components/transactions/CreateLinkButton'
 
 export default function Lend() {
-	const router = useRouter()
 	const [tokenAddress, setTokenAddress] = useState<Address | null>(null)
 	const [tokenAmount, setTokenAmount] = useState<number | null>(null)
 	const [password, setPassword] = useState<string | null>(null)
