@@ -11,10 +11,12 @@ export default function CreateLinkButton({
 	tokenAddress,
 	tokenAmount,
 	password,
+	onCreated,
 }: {
 	tokenAddress: Address | null
 	tokenAmount: number | null
 	password: string | null
+	onCreated: () => void
 }) {
 	const { primaryWallet } = useDynamicContext()
 
@@ -51,8 +53,10 @@ export default function CreateLinkButton({
 					keccak256(encodeAbiParameters([{ type: 'string' }], [password])),
 				],
 			})
+			onCreated()
 		}
 	}
+
 	return (
 		<div>
 			<Button
