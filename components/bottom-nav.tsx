@@ -1,4 +1,4 @@
-import { ChartCandlestick, HomeIcon, PenIcon } from 'lucide-react'
+import { ChartCandlestick, GiftIcon, HomeIcon, PenIcon } from 'lucide-react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 
@@ -47,6 +47,6 @@ const links = [
 	{
 		label: 'Redeem',
 		href: '/redeem',
-		icon: <ChartCandlestick />,
+		icon: <GiftIcon />,
 	},
 ]
