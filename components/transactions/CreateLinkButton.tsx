@@ -75,6 +75,32 @@ export default function CreateLinkButton({
 			})
 			toast.dismiss(loadingToastId)
 			toast.success('Link created!')
+
+			// Store the password on walrus
+			const aggregator = 'https://aggregator.walrus-testnet.walrus.space'
+			const publisher = 'https://publisher.walrus-testnet.walrus.space'
+
+			const response = await fetch(`${publisher}/v1/store`, {
+				method: 'PUT',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify({
+					password,
+				}),
+			})
+			const data = await response.json()
+			console.log(data)
+			const blobId = data.newlyCreated.blobObject.blobId
+			const storedPasswords = localStorage.getItem('storedPasswords')
+			if (!storedPasswords) {
+				localStorage.setItem('storedPasswords', blobId + ':' + password)
+			} else {
+				localStorage.setItem(
+					'storedPasswords',
+					storedPasswords + '|' + blobId + ':' + password,
+				)
+			}
 			onCreated()
 		}
 	}
