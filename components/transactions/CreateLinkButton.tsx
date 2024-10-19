@@ -1,13 +1,7 @@
 import React from 'react'
 import { useDynamicContext } from '@dynamic-labs/sdk-react-core'
 import { isEthereumWallet } from '@dynamic-labs/ethereum'
-import {
-	Address,
-	encodeAbiParameters,
-	keccak256,
-	parseEther,
-	toHex,
-} from 'viem'
+import { Address, encodeAbiParameters, keccak256 } from 'viem'
 import { Button } from '../ui/button'
 import { usdcContractAbi, usdcContractAddress } from '@/lib/contracts/USDC'
 import { linkToLamboAbi, linkToLamboAddress } from '@/lib/contracts/LinkToLambo'

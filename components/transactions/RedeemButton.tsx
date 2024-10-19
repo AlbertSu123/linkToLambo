@@ -1,7 +1,6 @@
 import React from 'react'
 import { useDynamicContext } from '@dynamic-labs/sdk-react-core'
 import { isEthereumWallet } from '@dynamic-labs/ethereum'
-import { toHex } from 'viem'
 import { Button } from '../ui/button'
 import { linkToLamboAbi, linkToLamboAddress } from '@/lib/contracts/LinkToLambo'
 import { DEFAULT_CHAIN } from '@/lib/constants'
