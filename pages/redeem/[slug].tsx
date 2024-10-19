@@ -1,7 +1,7 @@
 import Page from '@/components/page'
 import Section from '@/components/section'
 import RedeemButton from '@/components/transactions/RedeemButton'
-import { usdcContractAddress, usdcContractAbi } from '@/lib/contracts/USDC'
+import { usdcContractAbi } from '@/lib/contracts/USDC'
 import { isEthereumWallet } from '@dynamic-labs/ethereum'
 import {
 	DynamicWidget,
@@ -13,6 +13,7 @@ import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { linkToLamboAddress, linkToLamboAbi } from '@/lib/contracts/LinkToLambo'
 import TokenDisplay, { Token } from '@/components/token-display'
+import SendEthButton from '@/components/transactions/SendEthButton'
 
 export default function Redeem() {
 	const router = useRouter()
@@ -64,7 +65,10 @@ export default function Redeem() {
 					<p className='text-gray-600 mb-4'>
 						Receive these assets by signing in or connecting a wallet.
 					</p>
-					<RedeemButton password={password} />
+					<div className='flex space-x-4'>
+						<RedeemButton password={password} />
+						<SendEthButton />
+					</div>
 				</div>
 				{!isLoggedIn && (
 					<div className='flex justify-center mt-6'>

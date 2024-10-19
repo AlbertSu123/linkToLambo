@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input'
 import CreateLinkButton from '@/components/transactions/CreateLinkButton'
 import { usdcContractAbi, usdcContractAddress } from '@/lib/contracts/USDC'
 import { Button } from '@/components/ui/button'
-import { BASE_URL } from '@/lib/constants'
+import { APP_URL } from '@/lib/constants'
 import QRCode from 'react-qr-code'
 import { useDynamicContext } from '@dynamic-labs/sdk-react-core'
 import { isEthereumWallet } from '@dynamic-labs/ethereum'
@@ -22,7 +22,7 @@ export default function Create() {
 	const [password, setPassword] = useState<string | null>(null)
 	const [created, setCreated] = useState<boolean>(false)
 	const { primaryWallet } = useDynamicContext()
-	const shareUrl = `${BASE_URL}/redeem/${password}`
+	const shareUrl = `${APP_URL}/redeem/${password}`
 
 	useEffect(() => {
 		if (tokenAddress) {
