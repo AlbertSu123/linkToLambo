@@ -4,6 +4,7 @@ import { isEthereumWallet } from '@dynamic-labs/ethereum'
 import { Button } from '../ui/button'
 import { linkToLamboAbi, linkToLamboAddress } from '@/lib/contracts/LinkToLambo'
 import { DEFAULT_CHAIN } from '@/lib/constants'
+import { toast } from 'sonner'
 
 export default function RedeemButton({
 	password,
@@ -16,7 +17,9 @@ export default function RedeemButton({
 		if (!password) {
 			return
 		}
+
 		if (primaryWallet && isEthereumWallet(primaryWallet)) {
+			const loading = toast.loading('Redeeming link...')
 			const client = await primaryWallet.getWalletClient(
 				DEFAULT_CHAIN.id.toString(),
 			)
@@ -26,6 +29,8 @@ export default function RedeemButton({
 				functionName: 'redeemLink',
 				args: [password],
 			})
+			toast.dismiss(loading)
+			toast.success('Token redeemed!')
 		}
 	}
 	return (
