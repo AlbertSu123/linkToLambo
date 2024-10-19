@@ -14,19 +14,18 @@ import { useEffect, useState } from 'react'
 import { linkToLamboAddress, linkToLamboAbi } from '@/lib/contracts/LinkToLambo'
 import TokenDisplay, { Token } from '@/components/token-display'
 import SendEthButton from '@/components/transactions/SendEthButton'
+import { publicClient } from '@/lib/constants'
 
 export default function Redeem() {
 	const router = useRouter()
 	const password = router.query.slug as string
 	const isLoggedIn = useIsLoggedIn()
-	const { primaryWallet } = useDynamicContext()
 	const [tokenBalances, setTokenBalances] = useState<Token>()
 
 	useEffect(() => {
 		const fetchTokenBalance = async () => {
-			if (primaryWallet && isEthereumWallet(primaryWallet)) {
-				const client = await primaryWallet.getPublicClient()
-				const amount = await client.readContract({
+			try {
+				const amount = await publicClient.readContract({
 					address: linkToLamboAddress,
 					abi: linkToLamboAbi,
 					functionName: 'tokenAmounts',
@@ -34,7 +33,7 @@ export default function Redeem() {
 						keccak256(encodeAbiParameters([{ type: 'string' }], [password])),
 					],
 				})
-				const tokenAddress = (await client.readContract({
+				const tokenAddress = (await publicClient.readContract({
 					address: linkToLamboAddress,
 					abi: linkToLamboAbi,
 					functionName: 'tokenAddresses',
@@ -42,7 +41,8 @@ export default function Redeem() {
 						keccak256(encodeAbiParameters([{ type: 'string' }], [password])),
 					],
 				})) as Address
-				const name = await client.readContract({
+
+				const name = await publicClient.readContract({
 					address: tokenAddress,
 					abi: usdcContractAbi,
 					functionName: 'name',
@@ -52,10 +52,12 @@ export default function Redeem() {
 					amount: Number(amount),
 					name: name,
 				})
+			} catch (error) {
+				console.error(error)
 			}
 		}
 		fetchTokenBalance()
-	}, [primaryWallet])
+	}, [password])
 
 	return (
 		<Page>
@@ -70,17 +72,17 @@ export default function Redeem() {
 						<SendEthButton />
 					</div>
 				</div>
-				{!isLoggedIn && (
-					<div className='flex justify-center mt-6'>
-						<DynamicWidget variant='modal' />
-					</div>
-				)}
 				{tokenBalances && (
 					<TokenDisplay
 						address={tokenBalances.address}
 						amount={tokenBalances.amount}
 						name={tokenBalances.name}
 					/>
+				)}
+				{!isLoggedIn && (
+					<div className='flex justify-center mt-6'>
+						<DynamicWidget variant='modal' />
+					</div>
 				)}
 			</Section>
 		</Page>
