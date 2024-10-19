@@ -34,7 +34,6 @@ export default function CreateLinkButton({
 			)
 
 			if (tokenAddress === usdcContractAddress) {
-				console.log('Minting USDC', primaryWallet.address, tokenAmount)
 				const mintUSDCTx = await client.writeContract({
 					address: usdcContractAddress,
 					abi: usdcContractAbi,
@@ -58,7 +57,6 @@ export default function CreateLinkButton({
 					keccak256(encodeAbiParameters([{ type: 'string' }], [password])),
 				],
 			})
-			console.log('createLinkTx', createLinkTx)
 		}
 	}
 	return (
