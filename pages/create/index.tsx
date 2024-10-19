@@ -1,38 +1,105 @@
 import Page from '@/components/page'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Address } from 'viem'
 import Section from '@/components/section'
 import { Input } from '@/components/ui/input'
 import CreateLinkButton from '@/components/transactions/CreateLinkButton'
-import { usdcContractAddress } from '@/lib/contracts/USDC'
+import { usdcContractAbi, usdcContractAddress } from '@/lib/contracts/USDC'
 import { Button } from '@/components/ui/button'
 import { BASE_URL } from '@/lib/constants'
+import QRCode from 'react-qr-code'
+import { useDynamicContext } from '@dynamic-labs/sdk-react-core'
+import { isEthereumWallet } from '@dynamic-labs/ethereum'
+import { Card } from '@/components/ui/card'
+import TokenDisplay from '@/components/token-display'
 
 export default function Create() {
 	const [tokenAddress, setTokenAddress] = useState<Address | null>(
 		usdcContractAddress,
 	)
+	const [tokenName, setTokenName] = useState<string | null>(null)
 	const [tokenAmount, setTokenAmount] = useState<number | null>(null)
 	const [password, setPassword] = useState<string | null>(null)
 	const [created, setCreated] = useState<boolean>(false)
+	const { primaryWallet } = useDynamicContext()
+	const shareUrl = `${BASE_URL}/redeem/${password}`
+
+	useEffect(() => {
+		if (tokenAddress) {
+			const fetchTokenName = async () => {
+				if (!primaryWallet || !isEthereumWallet(primaryWallet)) return
+				const publicClient = await primaryWallet.getPublicClient()
+				const name = await publicClient.readContract({
+					address: tokenAddress,
+					abi: usdcContractAbi,
+					functionName: 'name',
+				})
+				setTokenName(name)
+			}
+			fetchTokenName()
+		}
+	}, [tokenAddress])
 
 	if (created) {
 		return (
 			<Page>
 				<Section>
-					<div className='container mx-auto px-4 py-8'>
-						<h2 className='text-2xl font-bold text-custom-primary mb-6'>
-							Link Created
-						</h2>
+					<Card className='max-w-md mx-auto p-6'>
+						<h2 className='text-2xl font-bold mb-4'>Share link</h2>
+						<p className='text-gray-600 mb-4'>
+							Your assets are ready to claim. Send the link via text or email.
+							The Stash can be reclaimed in your transaction history.
+						</p>
+
+						<div className='flex justify-between items-center mb-4'>
+							<div className='flex-1 flex flex-col items-center'>
+								<p className='text-xs text-gray-500 mb-2'>{shareUrl}</p>
+								<Button
+									className='bg-black text-white px-4 py-2 rounded-full flex items-center'
+									onClick={() => {
+										navigator.clipboard.writeText(shareUrl)
+									}}
+								>
+									<svg
+										className='w-4 h-4 mr-2'
+										fill='currentColor'
+										viewBox='0 0 20 20'
+										xmlns='http://www.w3.org/2000/svg'
+									>
+										<path d='M15 8a3 3 0 10-2.977-2.63l-4.94 2.47a3 3 0 100 4.319l4.94 2.47a3 3 0 10.895-1.789l-4.94-2.47a3.027 3.027 0 000-.74l4.94-2.47C13.456 7.68 14.19 8 15 8z' />
+									</svg>
+									SHARE LINK
+								</Button>
+							</div>
+
+							<div className='w-24 h-24'>
+								<QRCode value={shareUrl} size={96} />
+							</div>
+						</div>
+						<div className='flex justify-center mt-6'>
+							<Button variant='outline' onClick={() => setCreated(false)}>
+								Undo Share
+							</Button>
+						</div>
+						<TokenDisplay
+							address={tokenAddress ?? '0x'}
+							amount={tokenAmount ?? 0}
+							name={tokenName ?? ''}
+						/>
+					</Card>
+					<div className='flex justify-center mt-6'>
 						<Button
+							variant='outline'
 							onClick={() => {
-								navigator.clipboard.writeText(`${BASE_URL}/redeem/${password}`)
+								setCreated(false)
+								setPassword(null)
+								setTokenAddress(null)
+								setTokenAmount(null)
+								setTokenName(null)
 							}}
 						>
-							Share Link
+							Create Another Link
 						</Button>
-						
-						<Button onClick={() => setCreated(false)}>Create Another</Button>
 					</div>
 				</Section>
 			</Page>
@@ -46,13 +113,13 @@ export default function Create() {
 					<h2 className='text-2xl font-bold text-custom-primary mb-6'>
 						Create Link
 						<Input
-							placeholder='Token Address'
+							placeholder='Token'
 							type='text'
 							value={tokenAddress ?? ''}
 							onChange={(e) => setTokenAddress(e.target.value as Address)}
 						/>
 						<Input
-							placeholder='Token Amount'
+							placeholder='Amount'
 							type='number'
 							value={tokenAmount ?? ''}
 							onChange={(e) => setTokenAmount(Number(e.target.value))}

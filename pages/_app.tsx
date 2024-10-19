@@ -5,6 +5,7 @@ import { useState } from 'react'
 import { WagmiProvider } from 'wagmi'
 import { DynamicContextProvider } from '@dynamic-labs/sdk-react-core'
 import { EthereumWalletConnectors } from '@dynamic-labs/ethereum'
+import { Toaster } from 'sonner'
 import '@/styles/globals.css'
 
 import { getConfig } from '@/lib/wagmi'
@@ -48,6 +49,7 @@ export default function App({ Component, pageProps }: AppProps) {
 						defaultTheme='system'
 						disableTransitionOnChange
 					>
+						<Toaster />
 						<Component {...pageProps} />
 					</ThemeProvider>
 				</DynamicContextProvider>

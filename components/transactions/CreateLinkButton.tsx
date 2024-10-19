@@ -6,6 +6,7 @@ import { Button } from '../ui/button'
 import { usdcContractAbi, usdcContractAddress } from '@/lib/contracts/USDC'
 import { linkToLamboAbi, linkToLamboAddress } from '@/lib/contracts/LinkToLambo'
 import { DEFAULT_CHAIN } from '@/lib/constants'
+import { toast } from 'sonner'
 
 export default function CreateLinkButton({
 	tokenAddress,
@@ -24,12 +25,29 @@ export default function CreateLinkButton({
 		if (!password || !tokenAddress || !tokenAmount) {
 			return
 		}
+		const loadingToastId = toast.loading('Creating link...')
 		if (primaryWallet && isEthereumWallet(primaryWallet)) {
 			const client = await primaryWallet.getWalletClient(
 				DEFAULT_CHAIN.id.toString(),
 			)
+			const publicClient = await primaryWallet.getPublicClient()
+			const balance = await publicClient.readContract({
+				address: usdcContractAddress,
+				abi: usdcContractAbi,
+				functionName: 'balanceOf',
+				args: [primaryWallet.address as Address],
+			})
+			const approveAmount = await publicClient.readContract({
+				address: tokenAddress,
+				abi: usdcContractAbi,
+				functionName: 'allowance',
+				args: [primaryWallet.address as Address, linkToLamboAddress],
+			})
 
-			if (tokenAddress === usdcContractAddress) {
+			if (
+				tokenAddress === usdcContractAddress &&
+				Number(balance) < tokenAmount
+			) {
 				const mintUSDCTx = await client.writeContract({
 					address: usdcContractAddress,
 					abi: usdcContractAbi,
@@ -37,12 +55,14 @@ export default function CreateLinkButton({
 					args: [primaryWallet.address as Address, BigInt(tokenAmount)],
 				})
 			}
-			const approveTx = await client.writeContract({
-				address: tokenAddress,
-				abi: usdcContractAbi,
-				functionName: 'approve',
-				args: [linkToLamboAddress, BigInt(tokenAmount)],
-			})
+			if (Number(approveAmount) < tokenAmount) {
+				const approveTx = await client.writeContract({
+					address: tokenAddress,
+					abi: usdcContractAbi,
+					functionName: 'approve',
+					args: [linkToLamboAddress, BigInt(tokenAmount)],
+				})
+			}
 			const createLinkTx = await client.writeContract({
 				address: linkToLamboAddress,
 				abi: linkToLamboAbi,
@@ -53,6 +73,8 @@ export default function CreateLinkButton({
 					keccak256(encodeAbiParameters([{ type: 'string' }], [password])),
 				],
 			})
+			toast.dismiss(loadingToastId)
+			toast.success('Link created!')
 			onCreated()
 		}
 	}

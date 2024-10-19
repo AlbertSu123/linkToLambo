@@ -1,5 +1,6 @@
 import Page from '@/components/page'
 import Section from '@/components/section'
+import TokenDisplay, { Token } from '@/components/token-display'
 import { usdcContractAddress, usdcContractAbi } from '@/lib/contracts/USDC'
 import { isEthereumWallet } from '@dynamic-labs/ethereum'
 import {
@@ -9,12 +10,6 @@ import {
 } from '@dynamic-labs/sdk-react-core'
 import { useEffect, useState } from 'react'
 import { Address } from 'viem'
-
-type Token = {
-	tokenAddress: Address
-	tokenAmount: number
-	tokenName: string
-}
 
 const Index = () => {
 	const isLoggedIn = useIsLoggedIn()
@@ -39,15 +34,15 @@ const Index = () => {
 				console.log(balance)
 				setTokenBalances([
 					{
-						tokenAddress: usdcContractAddress,
-						tokenAmount: Number(balance),
-						tokenName: name,
+						address: usdcContractAddress,
+						amount: Number(balance),
+						name: name,
 					},
 				])
 			}
 		}
 		fetchTokenBalance()
-	}, [])
+	}, [primaryWallet])
 
 	if (!isLoggedIn) {
 		return (
@@ -74,9 +69,12 @@ const Index = () => {
 				<div className='container mx-auto px-4 py-8'>
 					<h1 className='text-3xl font-bold mb-4'>Your tokens</h1>
 					{tokenBalances.map((tokenBalance) => (
-						<div key={tokenBalance.tokenAddress}>
-							{tokenBalance.tokenAmount} {tokenBalance.tokenName}
-						</div>
+						<TokenDisplay
+							key={tokenBalance.address}
+							address={tokenBalance.address}
+							amount={tokenBalance.amount}
+							name={tokenBalance.name}
+						/>
 					))}
 				</div>
 			</Section>
