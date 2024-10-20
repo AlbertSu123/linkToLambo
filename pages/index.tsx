@@ -11,6 +11,7 @@ import {
 	useIsLoggedIn,
 } from '@dynamic-labs/sdk-react-core'
 import { useEffect, useState } from 'react'
+import { toast } from 'sonner'
 import { Address, encodeAbiParameters, keccak256 } from 'viem'
 
 const Index = () => {
@@ -20,6 +21,7 @@ const Index = () => {
 	const [storedPasswords, setStoredPasswords] = useState<string[]>([])
 	const [storedBlobs, setStoredBlobs] = useState<string[]>([])
 	const [passwordTokens, setPasswordTokens] = useState<Token[]>([])
+	const [username, setUsername] = useState<string>('')
 
 	useEffect(() => {
 		const storedPasswords = localStorage.getItem('storedPasswords')
@@ -69,6 +71,18 @@ const Index = () => {
 						name: 'USDC',
 					})),
 				)
+				try {
+					let creator_ens = await client.getEnsName({
+						address: primaryWallet.address as Address,
+					})
+					toast.success(
+						`Welcome to SmolSend ${creator_ens || (primaryWallet.address as Address)}!`,
+					)
+				} catch (error) {
+					toast.success(
+						`Welcome to SmolSend ${primaryWallet.address as Address}!`,
+					)
+				}
 			}
 		}
 		fetchPasswords()
