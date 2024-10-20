@@ -1,8 +1,0 @@
-{
-  "base-sepolia": {
-    "LinkToLambo": {
-      "address": "0x92D433526ab0112Caa640E0202C26C8A172b1f17",
-      "startBlock": 16825587
-    }
-  }
-}
