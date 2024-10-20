@@ -75,11 +75,11 @@ export const unichain = defineChain({
 	},
 })
 export const polygonZkEvm = defineChain({
-	id: 1101,
+	id: 80002,
 	name: 'Polygon zkEVM',
 	rpcUrls: {
-		default: { http: ['https://zkevm-rpc.com'] },
-		public: { http: ['https://zkevm-rpc.com'] },
+		default: { http: ['https://rpc-amoy.polygon.technology/'] },
+		public: { http: ['https://rpc-amoy.polygon.technology/'] },
 	},
 	blockExplorers: {
 		default: {
