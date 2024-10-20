@@ -29,7 +29,7 @@ export default function CreateLinkButton({
 			const client = await primaryWallet.getWalletClient(network.toString())
 			const publicClient = await primaryWallet.getPublicClient()
 			const balance = await publicClient.readContract({
-				address: usdcContractAddress,
+				address: usdcContractAddress[Number(network)],
 				abi: usdcContractAbi,
 				functionName: 'balanceOf',
 				args: [primaryWallet.address as Address],
@@ -38,15 +38,18 @@ export default function CreateLinkButton({
 				address: tokenAddress,
 				abi: usdcContractAbi,
 				functionName: 'allowance',
-				args: [primaryWallet.address as Address, linkToLamboAddress],
+				args: [
+					primaryWallet.address as Address,
+					linkToLamboAddress[Number(network)],
+				],
 			})
 
 			if (
-				tokenAddress === usdcContractAddress &&
+				tokenAddress === usdcContractAddress[Number(network)] &&
 				Number(balance) < tokenAmount
 			) {
 				const mintUSDCTx = await client.writeContract({
-					address: usdcContractAddress,
+					address: usdcContractAddress[Number(network)],
 					abi: usdcContractAbi,
 					functionName: 'mint',
 					args: [primaryWallet.address as Address, BigInt(tokenAmount)],
@@ -57,11 +60,11 @@ export default function CreateLinkButton({
 					address: tokenAddress,
 					abi: usdcContractAbi,
 					functionName: 'approve',
-					args: [linkToLamboAddress, BigInt(tokenAmount)],
+					args: [linkToLamboAddress[Number(network)], BigInt(tokenAmount)],
 				})
 			}
 			const createLinkTx = await client.writeContract({
-				address: linkToLamboAddress,
+				address: linkToLamboAddress[Number(network)],
 				abi: linkToLamboAbi,
 				functionName: 'createLink',
 				args: [

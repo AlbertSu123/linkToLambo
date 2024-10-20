@@ -1,7 +1,19 @@
 import { Address } from 'viem'
 
-export const usdcContractAddress: Address =
-	'0xFC033C2A76EF29F9264deeC78fd18172e3dCFF6f'
+export const usdcContractAddress: Record<number, Address> = {
+	84532: '0xFC033C2A76EF29F9264deeC78fd18172e3dCFF6f', // Base Sepolia
+	974399131: '0xC0eBF6f0dd14937Dd5606f4948D296593F7b1141', // Skale
+	1301: '0xb18130AF620E1AcF51eEF5a191d08d6EfC47fFE0', // Unichain
+	1101: '0x20e11C584E5F30BB48cBF452B20aCB9E2D4A843C', // Polygon ZKEVM
+	1513: '0x20e11C584E5F30BB48cBF452B20aCB9E2D4A843C', // Story Protocol
+	22040: '0x4581ea49EF41e55FcE60cc43D5752F5955bf6AD1', // AirDAO
+	100: '0x20e11C584E5F30BB48cBF452B20aCB9E2D4A843C', // Gnosis Chain
+	545: '0x20e11C584E5F30BB48cBF452B20aCB9E2D4A843C', // Flow Testnet
+	296: '0x20e11C584E5F30BB48cBF452B20aCB9E2D4A843C', // Hedera
+	48899: '0x20e11C584E5F30BB48cBF452B20aCB9E2D4A843C', // Zircuit
+	2810: '0x20e11C584E5F30BB48cBF452B20aCB9E2D4A843C', // Morph
+}
+
 export const usdcContractAbi = [
 	{ type: 'constructor', inputs: [], stateMutability: 'nonpayable' },
 	{

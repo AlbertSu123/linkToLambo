@@ -23,7 +23,7 @@ export default function RedeemButton({
 			const loading = toast.loading('Redeeming link...')
 			const client = await primaryWallet.getWalletClient(network.toString())
 			const redeemTx = await client.writeContract({
-				address: linkToLamboAddress,
+				address: linkToLamboAddress[Number(network)],
 				abi: linkToLamboAbi,
 				functionName: 'redeemLink',
 				args: [password],

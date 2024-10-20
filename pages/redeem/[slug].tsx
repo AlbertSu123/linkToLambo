@@ -27,7 +27,7 @@ export default function Redeem() {
 			try {
 				const publicClient = getPublicClient(Number(network))
 				const amount = await publicClient.readContract({
-					address: linkToLamboAddress,
+					address: linkToLamboAddress[Number(network)],
 					abi: linkToLamboAbi,
 					functionName: 'tokenAmounts',
 					args: [
@@ -35,7 +35,7 @@ export default function Redeem() {
 					],
 				})
 				const tokenAddress = (await publicClient.readContract({
-					address: linkToLamboAddress,
+					address: linkToLamboAddress[Number(network)],
 					abi: linkToLamboAbi,
 					functionName: 'tokenAddresses',
 					args: [

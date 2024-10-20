@@ -16,14 +16,14 @@ import { toast } from 'sonner'
 import { linkToLamboAddress, linkToLamboAbi } from '@/lib/contracts/LinkToLambo'
 
 export default function Create() {
+	const { primaryWallet, network } = useDynamicContext()
 	const [tokenAddress, setTokenAddress] = useState<Address | null>(
-		usdcContractAddress,
+		usdcContractAddress[Number(network)],
 	)
 	const [tokenName, setTokenName] = useState<string | null>(null)
 	const [tokenAmount, setTokenAmount] = useState<number | null>(null)
 	const [password, setPassword] = useState<string | null>(null)
 	const [created, setCreated] = useState<boolean>(false)
-	const { primaryWallet, network } = useDynamicContext()
 	const shareUrl = `${APP_URL}/redeem/${password}`
 
 	useEffect(() => {
@@ -47,7 +47,7 @@ export default function Create() {
 			const loading = toast.loading('Redeeming link...')
 			const client = await primaryWallet.getWalletClient(network.toString())
 			const redeemTx = await client.writeContract({
-				address: linkToLamboAddress,
+				address: linkToLamboAddress[Number(network)],
 				abi: linkToLamboAbi,
 				functionName: 'redeemLink',
 				args: [password],

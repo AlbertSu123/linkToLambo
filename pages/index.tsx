@@ -15,7 +15,7 @@ import { Address, encodeAbiParameters, keccak256 } from 'viem'
 
 const Index = () => {
 	const isLoggedIn = useIsLoggedIn()
-	const { primaryWallet } = useDynamicContext()
+	const { primaryWallet, network } = useDynamicContext()
 	const [tokenBalances, setTokenBalances] = useState<Token[]>([])
 	const [storedPasswords, setStoredPasswords] = useState<string[]>([])
 	const [storedBlobs, setStoredBlobs] = useState<string[]>([])
@@ -41,7 +41,7 @@ const Index = () => {
 
 				for (const password of storedPasswords) {
 					const tokenAmount = await client.readContract({
-						address: linkToLamboAddress,
+						address: linkToLamboAddress[Number(network)],
 						abi: linkToLamboAbi,
 						functionName: 'tokenAmounts',
 						args: [
@@ -52,7 +52,7 @@ const Index = () => {
 				}
 				for (const password of storedPasswords) {
 					const tokenAddress = await client.readContract({
-						address: linkToLamboAddress,
+						address: linkToLamboAddress[Number(network)],
 						abi: linkToLamboAbi,
 						functionName: 'tokenAddresses',
 						args: [
@@ -79,19 +79,19 @@ const Index = () => {
 			if (primaryWallet && isEthereumWallet(primaryWallet)) {
 				const client = await primaryWallet.getPublicClient()
 				const balance = await client.readContract({
-					address: usdcContractAddress,
+					address: usdcContractAddress[Number(network)],
 					abi: usdcContractAbi,
 					functionName: 'balanceOf',
 					args: [primaryWallet.address as Address],
 				})
 				const name = await client.readContract({
-					address: usdcContractAddress,
+					address: usdcContractAddress[Number(network)],
 					abi: usdcContractAbi,
 					functionName: 'name',
 				})
 				setTokenBalances([
 					{
-						address: usdcContractAddress,
+						address: usdcContractAddress[Number(network)],
 						amount: Number(balance),
 						name: name,
 					},

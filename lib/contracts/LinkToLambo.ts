@@ -1,7 +1,18 @@
 import { Address } from 'viem'
 
-export const linkToLamboAddress: Address =
-	'0x01a3473184cc6ffC6Bd4D9c907B0E9Bd6129989d'
+export const linkToLamboAddress: Record<number, Address> = {
+	84532: '0x01a3473184cc6ffC6Bd4D9c907B0E9Bd6129989d', // Base Sepolia
+	974399131: '0xAc3934f8cc641c83FAeD3c1b6123B68518A04649', // Skale
+	1301: '0xC0eBF6f0dd14937Dd5606f4948D296593F7b1141', // Unichain
+	1101: '0x4581ea49EF41e55FcE60cc43D5752F5955bf6AD1', // Polygon ZKEVM
+	1513: '0x4581ea49EF41e55FcE60cc43D5752F5955bf6AD1', // Story Protocol
+	22040: '0x20e11C584E5F30BB48cBF452B20aCB9E2D4A843C', // AirDAO
+	100: '0xb18130AF620E1AcF51eEF5a191d08d6EfC47fFE0', // Gnosis Chain
+	545: '0x4581ea49EF41e55FcE60cc43D5752F5955bf6AD1', // Flow Testnet
+	296: '0x4581ea49EF41e55FcE60cc43D5752F5955bf6AD1', // Hedera
+	48899: '0x4581ea49EF41e55FcE60cc43D5752F5955bf6AD1', // Zircuit
+	2810: '0x4581ea49EF41e55FcE60cc43D5752F5955bf6AD1', // Morph
+}
 export const linkToLamboAbi = [
 	{
 		type: 'function',
