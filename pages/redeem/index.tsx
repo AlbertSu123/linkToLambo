@@ -1,6 +1,7 @@
 import Page from '@/components/page'
 import Section from '@/components/section'
 import RedeemButton from '@/components/transactions/RedeemButton'
+import SendEthButton from '@/components/transactions/SendEthButton'
 import { Input } from '@/components/ui/input'
 import { useState } from 'react'
 
@@ -17,12 +18,15 @@ export default function Redeem() {
 					<div className='space-y-6'>
 						<Input
 							placeholder='Enter Password'
-							type='password'
+							type='text'
 							value={password}
 							onChange={(e) => setPassword(e.target.value)}
 							className='w-full'
 						/>
-						<RedeemButton password={password} />
+						<div className='flex space-x-4'>
+							<RedeemButton password={password} />
+							<SendEthButton />
+						</div>
 					</div>
 				</div>
 			</Section>

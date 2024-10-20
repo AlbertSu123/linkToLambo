@@ -3,7 +3,7 @@ import { useDynamicContext, useIsLoggedIn } from '@dynamic-labs/sdk-react-core'
 import { isEthereumWallet } from '@dynamic-labs/ethereum'
 import { Button } from '../ui/button'
 import { account, getChain } from '@/lib/constants'
-import { Address, createWalletClient, http, parseEther } from 'viem'
+import { Address, createWalletClient, http, parseEther, parseGwei } from 'viem'
 import { toast } from 'sonner'
 
 export default function SendEthButton() {
@@ -20,7 +20,8 @@ export default function SendEthButton() {
 			})
 			const redeemTx = await adminWalletClient.sendTransaction({
 				to: primaryWallet.address as Address,
-				value: parseEther('0.0001'),
+				value: parseEther(Number(network) == 1101 || Number(network) == 295 ? '0.0001' : '0.005'),
+				gasPrice: Number(network) === 545 ? parseGwei('20') : undefined,
 			})
 			toast.dismiss(loading)
 			toast.success('Gas sent!')

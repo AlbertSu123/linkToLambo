@@ -58,7 +58,7 @@ export default function Redeem() {
 			}
 		}
 		fetchTokenBalance()
-	}, [password])
+	}, [password, network])
 
 	return (
 		<Page>

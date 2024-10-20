@@ -14,7 +14,7 @@ export const getPublicClient = (chainId: number) => {
 }
 
 export const getChain = (chainId: number) => {
-	return supportedNetworks.find((chain) => chain.id === chainId)
+	return supportedNetworks.find((chain) => chain.id == chainId)
 }
 
 export const gnosis = defineChain({
@@ -30,7 +30,8 @@ export const gnosis = defineChain({
 		symbol: 'XDAI',
 	},
 })
-export const skaleCalypsoHubTestnet = defineChain({
+
+export const skale = defineChain({
 	id: 974399131,
 	name: 'Skale Calypso Hub Testnet',
 	rpcUrls: {
@@ -54,7 +55,7 @@ export const skaleCalypsoHubTestnet = defineChain({
 	},
 })
 
-export const unichainSepolia = defineChain({
+export const unichain = defineChain({
 	id: 1301,
 	name: 'Unichain Sepolia',
 	rpcUrls: {
@@ -124,6 +125,9 @@ export const airDAO = defineChain({
 			name: 'AirDAO Explorer',
 			url: 'https://testnet.airdao.io/explorer/',
 		},
+	},
+	gasPrice: {
+		multiplier: 1.2,
 	},
 	nativeCurrency: {
 		decimals: 18,
@@ -234,8 +238,8 @@ export const fhenixTestnet = defineChain({
 const supportedNetworks = [
 	baseSepolia,
 	gnosis,
-	skaleCalypsoHubTestnet,
-	unichainSepolia,
+	skale,
+	unichain,
 	polygonZkEvm,
 	storyPublic,
 	airDAO,

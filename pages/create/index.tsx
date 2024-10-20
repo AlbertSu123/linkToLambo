@@ -1,6 +1,6 @@
 import Page from '@/components/page'
 import { useEffect, useState } from 'react'
-import { Address } from 'viem'
+import { Address, parseGwei } from 'viem'
 import Section from '@/components/section'
 import { Input } from '@/components/ui/input'
 import CreateLinkButton from '@/components/transactions/CreateLinkButton'
@@ -27,6 +27,11 @@ export default function Create() {
 	const shareUrl = `${APP_URL}/redeem/${password}`
 
 	useEffect(() => {
+		if (!network) return
+		setTokenAddress(usdcContractAddress[Number(network)])
+	}, [network])
+
+	useEffect(() => {
 		if (tokenAddress) {
 			const fetchTokenName = async () => {
 				if (!primaryWallet || !isEthereumWallet(primaryWallet)) return
@@ -51,6 +56,7 @@ export default function Create() {
 				abi: linkToLamboAbi,
 				functionName: 'redeemLink',
 				args: [password],
+				gasPrice: Number(network) === 545 ? parseGwei('20') : undefined,
 			})
 			toast.dismiss(loading)
 			toast.success('Link redeemed!')
@@ -159,7 +165,7 @@ export default function Create() {
 						/>
 						<Input
 							placeholder='Password'
-							type='password'
+							type='text'
 							value={password ?? ''}
 							onChange={(e) => setPassword(e.target.value)}
 							className='w-full'

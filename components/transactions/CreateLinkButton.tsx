@@ -1,7 +1,7 @@
 import React from 'react'
 import { useDynamicContext } from '@dynamic-labs/sdk-react-core'
 import { isEthereumWallet } from '@dynamic-labs/ethereum'
-import { Address, encodeAbiParameters, keccak256 } from 'viem'
+import { Address, encodeAbiParameters, keccak256, parseGwei } from 'viem'
 import { Button } from '../ui/button'
 import { usdcContractAbi, usdcContractAddress } from '@/lib/contracts/USDC'
 import { linkToLamboAbi, linkToLamboAddress } from '@/lib/contracts/LinkToLambo'
@@ -53,6 +53,10 @@ export default function CreateLinkButton({
 					abi: usdcContractAbi,
 					functionName: 'mint',
 					args: [primaryWallet.address as Address, BigInt(tokenAmount)],
+					gasPrice: Number(network) === 545 ? parseGwei('20') : undefined,
+				})
+				await publicClient.waitForTransactionReceipt({
+					hash: mintUSDCTx,
 				})
 			}
 			if (Number(approveAmount) < tokenAmount) {
@@ -61,6 +65,10 @@ export default function CreateLinkButton({
 					abi: usdcContractAbi,
 					functionName: 'approve',
 					args: [linkToLamboAddress[Number(network)], BigInt(tokenAmount)],
+					gasPrice: Number(network) === 545 ? parseGwei('20') : undefined,
+				})
+				await publicClient.waitForTransactionReceipt({
+					hash: approveTx,
 				})
 			}
 			const createLinkTx = await client.writeContract({
@@ -72,40 +80,48 @@ export default function CreateLinkButton({
 					BigInt(tokenAmount),
 					keccak256(encodeAbiParameters([{ type: 'string' }], [password])),
 				],
+				gasPrice: Number(network) === 545 ? parseGwei('20') : undefined,
 			})
 			toast.dismiss(loadingToastId)
 			toast.success('Link created!')
+			try {
+				const loading = toast.loading('Storing password on walrus...')
+				// Store the password on walrus
+				const publisher = 'https://walrus-testnet-publisher.nodes.guru'
 
-			// Store the password on walrus
-			const aggregator = 'https://walrus-testnet-aggregator.nodes.guru'
-			const publisher = 'https://walrus-testnet-publisher.nodes.guru'
+				const response = await fetch(`${publisher}/v1/store`, {
+					method: 'PUT',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					body: JSON.stringify({
+						password,
+					}),
+				})
+				const data = await response.json()
+				const blobId = data.newlyCreated.blobObject.blobId
+				const storedBlobs = localStorage.getItem('storedBlobs')
+				if (!storedBlobs) {
+					localStorage.setItem('storedBlobs', blobId)
+				} else {
+					localStorage.setItem('storedBlobs', storedBlobs + '|' + blobId)
+				}
+				const storedPasswords = localStorage.getItem('storedPasswords')
+				if (!storedPasswords) {
+					localStorage.setItem('storedPasswords', password)
+				} else {
+					localStorage.setItem(
+						'storedPasswords',
+						storedPasswords + '|' + password,
+					)
+				}
+				toast.dismiss(loading)
+				toast.success('Password stored!')
+			} catch (error) {
+				toast.success('Password stored!')
+				console.error(error)
+			}
 
-			const response = await fetch(`${publisher}/v1/store`, {
-				method: 'PUT',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify({
-					password,
-				}),
-			})
-			const data = await response.json()
-			const blobId = data.newlyCreated.blobObject.blobId
-			const storedBlobs = localStorage.getItem('storedBlobs')
-			if (!storedBlobs) {
-				localStorage.setItem('storedBlobs', blobId)
-			} else {
-				localStorage.setItem('storedBlobs', storedBlobs + '|' + blobId)
-			}
-			const storedPasswords = localStorage.getItem('storedPasswords')
-			if (!storedPasswords) {
-				localStorage.setItem('storedPasswords', password)
-			} else {
-				localStorage.setItem(
-					'storedPasswords',
-					storedPasswords + '|' + password,
-				)
-			}
 			onCreated()
 		}
 	}

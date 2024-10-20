@@ -34,7 +34,7 @@ const Index = () => {
 
 	useEffect(() => {
 		const fetchPasswords = async () => {
-			if (primaryWallet && isEthereumWallet(primaryWallet)) {
+			if (primaryWallet && isEthereumWallet(primaryWallet) && network) {
 				const client = await primaryWallet.getPublicClient()
 				const tokenAmounts: number[] = []
 				const tokenAddresses: Address[] = []
@@ -72,11 +72,11 @@ const Index = () => {
 			}
 		}
 		fetchPasswords()
-	}, [storedBlobs])
+	}, [storedBlobs, network])
 
 	useEffect(() => {
 		const fetchTokenBalance = async () => {
-			if (primaryWallet && isEthereumWallet(primaryWallet)) {
+			if (primaryWallet && isEthereumWallet(primaryWallet) && network) {
 				const client = await primaryWallet.getPublicClient()
 				const balance = await client.readContract({
 					address: usdcContractAddress[Number(network)],
@@ -99,7 +99,7 @@ const Index = () => {
 			}
 		}
 		fetchTokenBalance()
-	}, [primaryWallet])
+	}, [primaryWallet, network])
 
 	if (!isLoggedIn) {
 		return (

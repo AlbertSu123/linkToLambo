@@ -5,6 +5,7 @@ import { Button } from '../ui/button'
 import { linkToLamboAbi, linkToLamboAddress } from '@/lib/contracts/LinkToLambo'
 import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
+import { parseGwei } from 'viem'
 
 export default function RedeemButton({
 	password,
@@ -27,6 +28,7 @@ export default function RedeemButton({
 				abi: linkToLamboAbi,
 				functionName: 'redeemLink',
 				args: [password],
+				gasPrice: Number(network) === 545 ? parseGwei('20') : undefined,
 			})
 			toast.dismiss(loading)
 			toast.success('Token redeemed!')
