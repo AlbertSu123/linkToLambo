@@ -7,42 +7,8 @@ import { DynamicContextProvider } from '@dynamic-labs/sdk-react-core'
 import { EthereumWalletConnectors } from '@dynamic-labs/ethereum'
 import { Toaster } from 'sonner'
 import '@/styles/globals.css'
-
 import { getConfig } from '@/lib/wagmi'
-
-// Setting up list of evmNetworks
-const evmNetworks = [
-	{
-		blockExplorerUrls: ['https://sepolia.basescan.org/'],
-		chainId: 84532,
-		chainName: 'Base Sepolia',
-		iconUrls: ['https://app.dynamic.xyz/assets/networks/eth.svg'],
-		name: 'Base Sepolia',
-		nativeCurrency: {
-			decimals: 18,
-			name: 'Ether',
-			symbol: 'ETH',
-			iconUrl: 'https://app.dynamic.xyz/assets/networks/eth.svg',
-		},
-		networkId: 1,
-		rpcUrls: ['https://sepolia.base.org'],
-	},
-	{
-		blockExplorerUrls: ['https://basescan.org/'],
-		chainId: 8453,
-		chainName: 'Base',
-		iconUrls: ['https://app.dynamic.xyz/assets/networks/eth.svg'],
-		name: 'Base',
-		nativeCurrency: {
-			decimals: 18,
-			name: 'Ether',
-			symbol: 'ETH',
-			iconUrl: 'https://app.dynamic.xyz/assets/networks/eth.svg',
-		},
-		networkId: 2,
-		rpcUrls: ['https://base.llamarpc.com'],
-	},
-]
+import { evmNetworks } from '@/lib/constants'
 
 export default function App({ Component, pageProps }: AppProps) {
 	const [config] = useState(() => getConfig())
