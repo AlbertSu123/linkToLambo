@@ -236,10 +236,9 @@ export const fhenixTestnet = defineChain({
 })
 
 const supportedNetworks = [
-	// airDAO,
-	// baseSepolia,
-	// gnosis,
-	// skale,
+	skale,
+	baseSepolia,
+	gnosis,
 	unichain,
 	polygonZkEvm,
 	storyPublic,
