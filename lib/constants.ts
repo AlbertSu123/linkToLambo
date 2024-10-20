@@ -236,18 +236,17 @@ export const fhenixTestnet = defineChain({
 })
 
 const supportedNetworks = [
-	morphHoleskyTestnet,
+	// morphHoleskyTestnet,
 	// hederaTestnet,
 	// skale,
-	baseSepolia,
+	// baseSepolia,
 	// gnosis,
 	// unichain,
-	// polygonZkEvm,
+	polygonZkEvm,
 	// storyPublic,
 	// airDAO,
 	// flow,
-	zircuitTestnet,
-
+	// zircuitTestnet,
 	// fhenixTestnet,
 ]
 
