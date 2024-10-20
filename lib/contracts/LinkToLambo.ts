@@ -1,7 +1,7 @@
 import { Address } from 'viem'
 
 export const linkToLamboAddress: Record<number, Address> = {
-	84532: '0x01a3473184cc6ffC6Bd4D9c907B0E9Bd6129989d', // Base Sepolia
+	84532: '0x92D433526ab0112Caa640E0202C26C8A172b1f17', // Base Sepolia
 	974399131: '0xAc3934f8cc641c83FAeD3c1b6123B68518A04649', // Skale
 	1301: '0xC0eBF6f0dd14937Dd5606f4948D296593F7b1141', // Unichain
 	1101: '0x4581ea49EF41e55FcE60cc43D5752F5955bf6AD1', // Polygon ZKEVM
