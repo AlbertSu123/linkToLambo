@@ -1,4 +1,12 @@
 # Summary
+## Flow
+1. A clear sort one-sentence description
+Send a link containing crypto!
+2. A short description of what you integrated Flow with and how
+This application is deployed on flow testnet
+3. A short description of the team and their social handles
+Albert - @paradigmeng420
+
 ## Goals
 - I want to send $DEGEN to a friend that has never used crypto before.
 ## Before
