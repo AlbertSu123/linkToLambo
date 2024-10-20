@@ -12,6 +12,7 @@ export const usdcContractAddress: Record<number, Address> = {
 	296: '0x20e11C584E5F30BB48cBF452B20aCB9E2D4A843C', // Hedera
 	48899: '0x20e11C584E5F30BB48cBF452B20aCB9E2D4A843C', // Zircuit
 	2810: '0x20e11C584E5F30BB48cBF452B20aCB9E2D4A843C', // Morph
+	80002: '0xC0eBF6f0dd14937Dd5606f4948D296593F7b1141', // Polygon zkEVM
 }
 
 export const usdcContractAbi = [

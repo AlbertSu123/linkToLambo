@@ -12,6 +12,7 @@ export const linkToLamboAddress: Record<number, Address> = {
 	296: '0x4581ea49EF41e55FcE60cc43D5752F5955bf6AD1', // Hedera
 	48899: '0x4581ea49EF41e55FcE60cc43D5752F5955bf6AD1', // Zircuit
 	2810: '0x4581ea49EF41e55FcE60cc43D5752F5955bf6AD1', // Morph
+	80002: '0xb18130AF620E1AcF51eEF5a191d08d6EfC47fFE0', // Polygon zkEVM
 }
 export const linkToLamboAbi = [
 	{
