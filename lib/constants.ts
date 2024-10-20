@@ -240,15 +240,15 @@ const supportedNetworks = [
 	// baseSepolia,
 	// gnosis,
 	// skale,
-	// unichain,
-	// polygonZkEvm,
-	// storyPublic,
-	// airDAO,
+	unichain,
+	polygonZkEvm,
+	storyPublic,
+	airDAO,
 	flow,
-	// hederaTestnet,
-	// zircuitTestnet,
-	// morphHoleskyTestnet,
-	// fhenixTestnet,
+	hederaTestnet,
+	zircuitTestnet,
+	morphHoleskyTestnet,
+	fhenixTestnet,
 ]
 
 // Gnosis - Mainnet
