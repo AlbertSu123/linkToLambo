@@ -15,25 +15,25 @@ export default function App({ Component, pageProps }: AppProps) {
 	const [queryClient] = useState(() => new QueryClient())
 
 	return (
-		<WagmiProvider config={config} initialState={pageProps.initialState}>
-			<QueryClientProvider client={queryClient}>
-				<DynamicContextProvider
-					settings={{
-						environmentId: 'f8b26bda-3d5a-4c6c-86e3-ce0fc5008e8c',
-						walletConnectors: [EthereumWalletConnectors],
-						overrides: { evmNetworks },
-					}}
+		// <WagmiProvider config={config} initialState={pageProps.initialState}>
+		<QueryClientProvider client={queryClient}>
+			<DynamicContextProvider
+				settings={{
+					environmentId: 'f8b26bda-3d5a-4c6c-86e3-ce0fc5008e8c',
+					walletConnectors: [EthereumWalletConnectors],
+					overrides: { evmNetworks },
+				}}
+			>
+				<ThemeProvider
+					attribute='class'
+					defaultTheme='system'
+					disableTransitionOnChange
 				>
-					<ThemeProvider
-						attribute='class'
-						defaultTheme='system'
-						disableTransitionOnChange
-					>
-						<Toaster />
-						<Component {...pageProps} />
-					</ThemeProvider>
-				</DynamicContextProvider>
-			</QueryClientProvider>
-		</WagmiProvider>
+					<Toaster />
+					<Component {...pageProps} />
+				</ThemeProvider>
+			</DynamicContextProvider>
+		</QueryClientProvider>
+		// </WagmiProvider>
 	)
 }
