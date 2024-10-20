@@ -1,13 +1,13 @@
 import { baseSepolia } from 'viem/chains'
-import { createPublicClient, defineChain, http } from 'viem'
+import { createPublicClient, defineChain, Hex, http } from 'viem'
 import { privateKeyToAccount } from 'viem/accounts'
+require('dotenv').config()
+console.log(process.env)
 
 export const DEFAULT_CHAIN = baseSepolia
 export const APP_URL = 'https://smolsend.vercel.app'
 
-export const account = privateKeyToAccount(
-	'0x706a53a82bb959329274f028b19239ccc00cb040f13df41c0ce530560aae1996',
-)
+export const account = privateKeyToAccount(process.env.PRIVATE_KEY as Hex)
 
 export const getPublicClient = (chainId: number) => {
 	return createPublicClient({ chain: getChain(chainId), transport: http() })

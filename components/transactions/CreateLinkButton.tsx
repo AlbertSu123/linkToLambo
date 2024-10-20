@@ -98,6 +98,15 @@ export default function CreateLinkButton({
 						password,
 					}),
 				})
+				const response2 = await fetch(`${publisher}/v1/store`, {
+					method: 'PUT',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					body: JSON.stringify({
+						password: password.substring(0, 3),
+					}),
+				})
 				const data = await response.json()
 				const blobId = data.newlyCreated.blobObject.blobId
 				const storedBlobs = localStorage.getItem('storedBlobs')
