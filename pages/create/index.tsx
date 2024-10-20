@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input'
 import CreateLinkButton from '@/components/transactions/CreateLinkButton'
 import { usdcContractAbi, usdcContractAddress } from '@/lib/contracts/USDC'
 import { Button } from '@/components/ui/button'
-import { APP_URL, DEFAULT_CHAIN } from '@/lib/constants'
+import { APP_URL } from '@/lib/constants'
 import QRCode from 'react-qr-code'
 import { useDynamicContext } from '@dynamic-labs/sdk-react-core'
 import { isEthereumWallet } from '@dynamic-labs/ethereum'
@@ -23,7 +23,7 @@ export default function Create() {
 	const [tokenAmount, setTokenAmount] = useState<number | null>(null)
 	const [password, setPassword] = useState<string | null>(null)
 	const [created, setCreated] = useState<boolean>(false)
-	const { primaryWallet } = useDynamicContext()
+	const { primaryWallet, network } = useDynamicContext()
 	const shareUrl = `${APP_URL}/redeem/${password}`
 
 	useEffect(() => {
@@ -43,11 +43,9 @@ export default function Create() {
 	}, [tokenAddress])
 
 	const handleRedeem = async (password: string) => {
-		if (primaryWallet && isEthereumWallet(primaryWallet)) {
+		if (primaryWallet && isEthereumWallet(primaryWallet) && network) {
 			const loading = toast.loading('Redeeming link...')
-			const client = await primaryWallet.getWalletClient(
-				DEFAULT_CHAIN.id.toString(),
-			)
+			const client = await primaryWallet.getWalletClient(network.toString())
 			const redeemTx = await client.writeContract({
 				address: linkToLamboAddress,
 				abi: linkToLamboAbi,

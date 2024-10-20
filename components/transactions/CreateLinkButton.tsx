@@ -5,7 +5,6 @@ import { Address, encodeAbiParameters, keccak256 } from 'viem'
 import { Button } from '../ui/button'
 import { usdcContractAbi, usdcContractAddress } from '@/lib/contracts/USDC'
 import { linkToLamboAbi, linkToLamboAddress } from '@/lib/contracts/LinkToLambo'
-import { DEFAULT_CHAIN } from '@/lib/constants'
 import { toast } from 'sonner'
 
 export default function CreateLinkButton({
@@ -19,17 +18,15 @@ export default function CreateLinkButton({
 	password: string | null
 	onCreated: () => void
 }) {
-	const { primaryWallet } = useDynamicContext()
+	const { primaryWallet, network } = useDynamicContext()
 
 	const handleTransaction = async () => {
 		if (!password || !tokenAddress || !tokenAmount) {
 			return
 		}
 		const loadingToastId = toast.loading('Creating link...')
-		if (primaryWallet && isEthereumWallet(primaryWallet)) {
-			const client = await primaryWallet.getWalletClient(
-				DEFAULT_CHAIN.id.toString(),
-			)
+		if (primaryWallet && isEthereumWallet(primaryWallet) && network) {
+			const client = await primaryWallet.getWalletClient(network.toString())
 			const publicClient = await primaryWallet.getPublicClient()
 			const balance = await publicClient.readContract({
 				address: usdcContractAddress,

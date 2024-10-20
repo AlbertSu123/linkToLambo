@@ -2,7 +2,6 @@ import Page from '@/components/page'
 import Section from '@/components/section'
 import RedeemButton from '@/components/transactions/RedeemButton'
 import { usdcContractAbi } from '@/lib/contracts/USDC'
-import { isEthereumWallet } from '@dynamic-labs/ethereum'
 import {
 	DynamicWidget,
 	useDynamicContext,
@@ -14,17 +13,19 @@ import { useEffect, useState } from 'react'
 import { linkToLamboAddress, linkToLamboAbi } from '@/lib/contracts/LinkToLambo'
 import TokenDisplay, { Token } from '@/components/token-display'
 import SendEthButton from '@/components/transactions/SendEthButton'
-import { publicClient } from '@/lib/constants'
+import { getPublicClient } from '@/lib/constants'
 
 export default function Redeem() {
 	const router = useRouter()
 	const password = router.query.slug as string
 	const isLoggedIn = useIsLoggedIn()
 	const [tokenBalances, setTokenBalances] = useState<Token>()
+	const { network } = useDynamicContext()
 
 	useEffect(() => {
 		const fetchTokenBalance = async () => {
 			try {
+				const publicClient = getPublicClient(Number(network))
 				const amount = await publicClient.readContract({
 					address: linkToLamboAddress,
 					abi: linkToLamboAbi,
