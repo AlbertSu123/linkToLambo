@@ -77,8 +77,8 @@ export default function CreateLinkButton({
 			toast.success('Link created!')
 
 			// Store the password on walrus
-			const aggregator = 'https://aggregator.walrus-testnet.walrus.space'
-			const publisher = 'https://publisher.walrus-testnet.walrus.space'
+			const aggregator = 'https://walrus-testnet-aggregator.nodes.guru'
+			const publisher = 'https://walrus-testnet-publisher.nodes.guru'
 
 			const response = await fetch(`${publisher}/v1/store`, {
 				method: 'PUT',
@@ -90,15 +90,20 @@ export default function CreateLinkButton({
 				}),
 			})
 			const data = await response.json()
-			console.log(data)
 			const blobId = data.newlyCreated.blobObject.blobId
+			const storedBlobs = localStorage.getItem('storedBlobs')
+			if (!storedBlobs) {
+				localStorage.setItem('storedBlobs', blobId)
+			} else {
+				localStorage.setItem('storedBlobs', storedBlobs + '|' + blobId)
+			}
 			const storedPasswords = localStorage.getItem('storedPasswords')
 			if (!storedPasswords) {
-				localStorage.setItem('storedPasswords', blobId + ':' + password)
+				localStorage.setItem('storedPasswords', password)
 			} else {
 				localStorage.setItem(
 					'storedPasswords',
-					storedPasswords + '|' + blobId + ':' + password,
+					storedPasswords + '|' + password,
 				)
 			}
 			onCreated()

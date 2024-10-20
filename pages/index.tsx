@@ -2,6 +2,7 @@ import { USDCIcon } from '@/components/icons/USDCIcon'
 import Page from '@/components/page'
 import Section from '@/components/section'
 import TokenDisplay, { Token } from '@/components/token-display'
+import { linkToLamboAddress, linkToLamboAbi } from '@/lib/contracts/LinkToLambo'
 import { usdcContractAddress, usdcContractAbi } from '@/lib/contracts/USDC'
 import { isEthereumWallet } from '@dynamic-labs/ethereum'
 import {
@@ -10,12 +11,68 @@ import {
 	useIsLoggedIn,
 } from '@dynamic-labs/sdk-react-core'
 import { useEffect, useState } from 'react'
-import { Address } from 'viem'
+import { Address, encodeAbiParameters, keccak256 } from 'viem'
 
 const Index = () => {
 	const isLoggedIn = useIsLoggedIn()
 	const { primaryWallet } = useDynamicContext()
 	const [tokenBalances, setTokenBalances] = useState<Token[]>([])
+	const [storedPasswords, setStoredPasswords] = useState<string[]>([])
+	const [storedBlobs, setStoredBlobs] = useState<string[]>([])
+	const [passwordTokens, setPasswordTokens] = useState<Token[]>([])
+
+	useEffect(() => {
+		const storedPasswords = localStorage.getItem('storedPasswords')
+		if (storedPasswords) {
+			setStoredPasswords(storedPasswords.split('|'))
+		}
+		const storedBlobs = localStorage.getItem('storedBlobs')
+		if (storedBlobs) {
+			setStoredBlobs(storedBlobs.split('|'))
+		}
+	}, [])
+
+	useEffect(() => {
+		const fetchPasswords = async () => {
+			if (primaryWallet && isEthereumWallet(primaryWallet)) {
+				const client = await primaryWallet.getPublicClient()
+				const tokenAmounts: number[] = []
+				const tokenAddresses: Address[] = []
+
+				for (const password of storedPasswords) {
+					const tokenAmount = await client.readContract({
+						address: linkToLamboAddress,
+						abi: linkToLamboAbi,
+						functionName: 'tokenAmounts',
+						args: [
+							keccak256(encodeAbiParameters([{ type: 'string' }], [password])),
+						],
+					})
+					tokenAmounts.push(Number(tokenAmount))
+				}
+				for (const password of storedPasswords) {
+					const tokenAddress = await client.readContract({
+						address: linkToLamboAddress,
+						abi: linkToLamboAbi,
+						functionName: 'tokenAddresses',
+						args: [
+							keccak256(encodeAbiParameters([{ type: 'string' }], [password])),
+						],
+					})
+					tokenAddresses.push(tokenAddress as Address)
+				}
+				console.log(tokenAmounts, tokenAddresses)
+				setPasswordTokens(
+					tokenAmounts.map((amount, index) => ({
+						address: tokenAddresses[index],
+						amount,
+						name: 'USDC',
+					})),
+				)
+			}
+		}
+		fetchPasswords()
+	}, [storedBlobs])
 
 	useEffect(() => {
 		const fetchTokenBalance = async () => {
@@ -32,7 +89,6 @@ const Index = () => {
 					abi: usdcContractAbi,
 					functionName: 'name',
 				})
-				console.log(balance)
 				setTokenBalances([
 					{
 						address: usdcContractAddress,
@@ -76,6 +132,15 @@ const Index = () => {
 				<div className='container mx-auto px-4 py-8'>
 					<h1 className='text-3xl font-bold mb-4'>Your tokens</h1>
 					{tokenBalances.map((tokenBalance) => (
+						<TokenDisplay
+							key={tokenBalance.address}
+							address={tokenBalance.address}
+							amount={tokenBalance.amount}
+							name={tokenBalance.name}
+						/>
+					))}
+					<h1 className='text-3xl font-bold mb-4'>Your passwords</h1>
+					{passwordTokens.map((tokenBalance) => (
 						<TokenDisplay
 							key={tokenBalance.address}
 							address={tokenBalance.address}
