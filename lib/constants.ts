@@ -12,8 +12,8 @@ export const publicClient = createPublicClient({
 	chain: DEFAULT_CHAIN,
 	transport: http(),
 })
-export const adminWalletClient = createWalletClient({
-	account,
-	chain: DEFAULT_CHAIN,
-	transport: http(),
-})
+
+export const getChain = (chainId: number) => {
+	if (chainId === 84532) return baseSepolia
+	return DEFAULT_CHAIN
+}
