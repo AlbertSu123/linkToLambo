@@ -3,7 +3,7 @@ import { createPublicClient, defineChain, http } from 'viem'
 import { privateKeyToAccount } from 'viem/accounts'
 
 export const DEFAULT_CHAIN = baseSepolia
-export const APP_URL = 'https://link-to-lambo.vercel.app'
+export const APP_URL = 'https://smolsend.vercel.app'
 
 export const account = privateKeyToAccount(
 	'0x706a53a82bb959329274f028b19239ccc00cb040f13df41c0ce530560aae1996',

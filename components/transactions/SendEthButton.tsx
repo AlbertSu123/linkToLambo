@@ -20,7 +20,7 @@ export default function SendEthButton() {
 			})
 			const redeemTx = await adminWalletClient.sendTransaction({
 				to: primaryWallet.address as Address,
-				value: parseEther(Number(network) == 1101 || Number(network) == 295 ? '0.0001' : '0.005'),
+				value: parseEther(Number(network) == 1101 ? '0.0001' : '0.005'),
 				gasPrice: Number(network) === 545 ? parseGwei('20') : undefined,
 			})
 			toast.dismiss(loading)
