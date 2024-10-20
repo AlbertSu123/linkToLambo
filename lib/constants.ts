@@ -236,7 +236,7 @@ export const fhenixTestnet = defineChain({
 })
 
 const supportedNetworks = [
-	airDAO,
+	// airDAO,
 	// baseSepolia,
 	// gnosis,
 	// skale,
@@ -244,7 +244,7 @@ const supportedNetworks = [
 	// polygonZkEvm,
 	// storyPublic,
 	// airDAO,
-	// flow,
+	flow,
 	// hederaTestnet,
 	// zircuitTestnet,
 	// morphHoleskyTestnet,

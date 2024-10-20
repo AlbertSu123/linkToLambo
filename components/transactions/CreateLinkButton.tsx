@@ -84,64 +84,64 @@ export default function CreateLinkButton({
 			})
 			toast.dismiss(loadingToastId)
 			toast.success('Link created!')
-			try {
-				const loading = toast.loading('Storing password on walrus...')
-				// Store the password on walrus
-				const publisher = 'https://walrus-testnet-publisher.nodes.guru'
+			// try {
+			// 	const loading = toast.loading('Storing password on walrus...')
+			// 	// Store the password on walrus
+			// 	const publisher = 'https://walrus-testnet-publisher.nodes.guru'
 
-				const response = await fetch(`${publisher}/v1/store`, {
-					method: 'PUT',
-					headers: {
-						'Content-Type': 'application/json',
-					},
-					body: JSON.stringify({
-						password,
-					}),
-				})
-				const response2 = await fetch(`${publisher}/v1/store`, {
-					method: 'PUT',
-					headers: {
-						'Content-Type': 'application/json',
-					},
-					body: JSON.stringify({
-						hint: password.substring(0, 3),
-					}),
-				})
-				const data2 = await response2.json()
-				const blobId2 = data2.newlyCreated.blobObject.blobId
-				const storedPasswordHints = localStorage.getItem('storedPasswordHints')
-				if (!storedPasswordHints) {
-					localStorage.setItem('storedPasswordHints', blobId2)
-				} else {
-					localStorage.setItem(
-						'storedBlobs',
-						storedPasswordHints + '|' + blobId2,
-					)
-				}
+			// 	const response = await fetch(`${publisher}/v1/store`, {
+			// 		method: 'PUT',
+			// 		headers: {
+			// 			'Content-Type': 'application/json',
+			// 		},
+			// 		body: JSON.stringify({
+			// 			password,
+			// 		}),
+			// 	})
+			// 	const response2 = await fetch(`${publisher}/v1/store`, {
+			// 		method: 'PUT',
+			// 		headers: {
+			// 			'Content-Type': 'application/json',
+			// 		},
+			// 		body: JSON.stringify({
+			// 			hint: password.substring(0, 3),
+			// 		}),
+			// 	})
+			// 	const data2 = await response2.json()
+			// 	const blobId2 = data2.newlyCreated.blobObject.blobId
+			// 	const storedPasswordHints = localStorage.getItem('storedPasswordHints')
+			// 	if (!storedPasswordHints) {
+			// 		localStorage.setItem('storedPasswordHints', blobId2)
+			// 	} else {
+			// 		localStorage.setItem(
+			// 			'storedBlobs',
+			// 			storedPasswordHints + '|' + blobId2,
+			// 		)
+			// 	}
 
-				const data = await response.json()
-				const blobId = data.newlyCreated.blobObject.blobId
-				const storedBlobs = localStorage.getItem('storedBlobs')
-				if (!storedBlobs) {
-					localStorage.setItem('storedBlobs', blobId)
-				} else {
-					localStorage.setItem('storedBlobs', storedBlobs + '|' + blobId)
-				}
-				// const storedPasswords = localStorage.getItem('storedPasswords')
-				// if (!storedPasswords) {
-				// 	localStorage.setItem('storedPasswords', password)
-				// } else {
-				// 	localStorage.setItem(
-				// 		'storedPasswords',
-				// 		storedPasswords + '|' + password,
-				// 	)
-				// }
-				toast.dismiss(loading)
-				toast.success('Password hint stored!')
-			} catch (error) {
-				toast.success('Password hint stored!')
-				console.error(error)
-			}
+			// 	const data = await response.json()
+			// 	const blobId = data.newlyCreated.blobObject.blobId
+			// 	const storedBlobs = localStorage.getItem('storedBlobs')
+			// 	if (!storedBlobs) {
+			// 		localStorage.setItem('storedBlobs', blobId)
+			// 	} else {
+			// 		localStorage.setItem('storedBlobs', storedBlobs + '|' + blobId)
+			// 	}
+			// 	// const storedPasswords = localStorage.getItem('storedPasswords')
+			// 	// if (!storedPasswords) {
+			// 	// 	localStorage.setItem('storedPasswords', password)
+			// 	// } else {
+			// 	// 	localStorage.setItem(
+			// 	// 		'storedPasswords',
+			// 	// 		storedPasswords + '|' + password,
+			// 	// 	)
+			// 	// }
+			// 	toast.dismiss(loading)
+			// 	toast.success('Password hint stored!')
+			// } catch (error) {
+			// 	toast.success('Password hint stored!')
+			// 	console.error(error)
+			// }
 
 			onCreated()
 		}
